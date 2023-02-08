@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import SignUp from '../pages/Signup';
 import MainPage from '../pages/Mainpage';
-import TodoList from '../pages/Todo';
+import Todo from '../pages/Todo';
 import SignIn from '../pages/Signin';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ export default function router() {
         <Route path='/' element={<MainPage />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/todolist' element={<TodoList />} />
+        <Route path='/todo' element={<Todo />} />
       </Routes>
     </Container>
   );
