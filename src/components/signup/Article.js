@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reOnChange } from '../../global/components/OnChange';
-import { Container, InputBox } from '../../global/style/SignArticle.styled';
+import { Container, InputBox, Btn } from '../../global/style/SignArticle.styled';
 
 export default function Article() {
   const navigate = useNavigate();
@@ -66,6 +66,7 @@ export default function Article() {
       <button data-testid='signup-button' onClick={() => signUp()} disabled={btnState}>
         회원가입
       </button>
+      <Btn onClick={() => navigate(-1)}>Home</Btn>
     </Container>
   );
 }
