@@ -84,6 +84,22 @@ export default function Article() {
     }
   };
 
+  const deleteTodo = (id) => {
+    axios
+      .delete(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(function (response) {
+        console.log(response);
+        getTodo();
+        setTodolist(response.data.map((datas) => datas));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {});
+  };
+
   return (
     <Container>
       <h1>To do List ✔</h1>
@@ -117,7 +133,14 @@ export default function Article() {
             </label>
             <button data-testid='modify-button'>수정</button>
 
-            <button data-testid='delete-button'>삭제</button>
+            <button
+              data-testid='delete-button'
+              onClick={() => {
+                deleteTodo(datas.id);
+              }}
+            >
+              삭제
+            </button>
           </li>
         ))}
     </Container>
