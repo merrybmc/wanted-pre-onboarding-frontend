@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const [btnState, setBtnState] = useState();
+  const navigate = useNavigate();
   useEffect(() => {
     const checkEmail = userInfo.email.toString().includes('@');
     const checkPassword = userInfo.password.length;
@@ -38,6 +40,7 @@ export default function Signup() {
       })
       .then(function (response) {
         console.log(response);
+        navigate('/signin');
       })
       .catch(function (error) {
         console.log(error);
