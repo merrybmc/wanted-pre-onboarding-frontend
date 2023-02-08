@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import { Container, Btn } from '../../global/style/SignArticle.styled';
@@ -6,22 +6,44 @@ import { reOnChange } from '../../global/components/OnChange';
 export default function Article() {
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const [todo, setTodo] = useState({ todo: '' });
+  const [todolist, setTodolist] = useState();
+
+  useEffect(() => {
+    getTodo();
+  }, []);
 
   // 로그인
   const token = localStorage.getItem('JWT');
-  const signUp = () => {
+
+  const createTodo = () => {
     axios
       .post('https://pre-onboarding-selection-task.shop/todos', todo, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       })
       .then(function (response) {
-        console.log(response);
+        getTodo();
       })
       .catch(function (error) {
         console.log(error);
       })
       .then(function () {});
   };
+
+  const getTodo = () => {
+    axios
+      .get('https://pre-onboarding-selection-task.shop/todos', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(function (response) {
+        console.log(response);
+        setTodolist(response.data.map((datas) => datas));
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {});
+  };
+
   return (
     <Container>
       <h1>To do List ✔</h1>
@@ -31,24 +53,21 @@ export default function Article() {
         <Btn
           data-testid='new-todo-add-button'
           onClick={() => {
-            signUp();
+            createTodo();
           }}
         >
           추가
         </Btn>
       </div>
-      <li>
-        <label>
-          <input type='checkbox' />
-          <span>TODO 1</span>
-        </label>
-      </li>
-      <li>
-        <label>
-          <input type='checkbox' />
-          <span>TODO 2</span>
-        </label>
-      </li>
+      {todolist &&
+        todolist.map((datas) => (
+          <li>
+            <label>
+              <input type='checkbox' />
+              <span>{datas.todo}</span>
+            </label>
+          </li>
+        ))}
     </Container>
   );
 }
