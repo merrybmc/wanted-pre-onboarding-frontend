@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reOnChange } from '../../global/components/OnChange';
-import { Container, InputBox } from '../../global/style/SignArticle.styled';
+import { Container, InputBox, Btn } from '../../global/style/SignArticle.styled';
 
 export default function Article() {
   const navigate = useNavigate();
@@ -49,9 +49,10 @@ export default function Article() {
         />
       </div>
       <br />
-      <button data-testid='signup-button' onClick={() => signUp()}>
+      <Btn data-testid='signup-button' onClick={() => signUp()}>
         로그인
-      </button>
+      </Btn>
+      <Btn onClick={() => navigate(-1)}>Home</Btn>
     </Container>
   );
 }

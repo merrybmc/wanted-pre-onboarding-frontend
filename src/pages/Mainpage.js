@@ -1,17 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import Article from '../components/mainpage/Article';
 
 export default function Mainpage() {
-  const navigate = useNavigate();
   return (
     <>
-      <button
-        onClick={() => {
-          navigate('/signup');
-        }}
-      >
-        회원가입
-      </button>
+      <Article />
     </>
   );
 }
