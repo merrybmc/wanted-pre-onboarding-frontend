@@ -4,6 +4,7 @@ import { Container, Btn } from '../../global/style/SignArticle.styled';
 
 export default function Article() {
   const navigate = useNavigate();
+
   return (
     <>
       <Container>
