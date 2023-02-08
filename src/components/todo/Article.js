@@ -110,8 +110,14 @@ export default function Article() {
                   updateCheckState(datas.id, datas.todo, datas.isCompleted);
                 }}
               />
-              <span>{datas.todo}</span>
+              <span>
+                {datas.todo}
+                {'\u00A0'}
+              </span>
             </label>
+            <button data-testid='modify-button'>수정</button>
+
+            <button data-testid='delete-button'>삭제</button>
           </li>
         ))}
     </Container>
