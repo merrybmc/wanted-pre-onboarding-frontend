@@ -1,14 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Signup() {
-  let data = { email: 'merrybmc@gmail.com', password: '1q2w3e4r' };
+  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
+  const [btnState, setBtnState] = useState();
+  useEffect(() => {
+    const checkEmail = userInfo.email.toString().includes('@');
+    const checkPassword = userInfo.password.length;
 
-  const SignUp = () => {
+    if (checkEmail === true && checkPassword >= 8) {
+      setBtnState(false);
+      console.log(userInfo);
+    } else if (checkEmail === false || userInfo.password.length < 8) {
+      setBtnState(true);
+      console.log(userInfo);
+    }
+  }, [userInfo]);
+
+  const onChangeEmail = (event) => {
+    const { name, value } = event.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const onChangePassword = (event) => {
+    const { name, value } = event.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const signUp = () => {
     // 회원가입
     axios
-      .post('https://pre-onboarding-selection-task.shop/auth/signup', data, {
+      .post('https://pre-onboarding-selection-task.shop/auth/signup', userInfo, {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(function (response) {
@@ -26,13 +51,14 @@ export default function Signup() {
     <Container>
       <div>
         ID {'\u00A0'}
-        {'\u00A0'}: <InputBox data-testid='email-input' />
+        {'\u00A0'}: <InputBox data-testid='email-input' onChange={onChangeEmail} name='email' />
         <br />
-        PW : <InputBox data-testid='password-input' />
+        PW : <InputBox data-testid='password-input' onChange={onChangePassword} name='password' />
       </div>
       <br />
-      <button data-testid='signup-button'>회원가입</button>
-      <button onClick={() => SignUp()}>axios 테스트</button>
+      <button data-testid='signup-button' onClick={() => signUp()} disabled={btnState}>
+        회원가입
+      </button>
     </Container>
   );
 }
