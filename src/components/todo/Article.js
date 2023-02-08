@@ -44,6 +44,46 @@ export default function Article() {
       .then(function () {});
   };
 
+  const updateCheckState = (id, todo, state) => {
+    if (state === false) {
+      axios
+        .put(
+          `https://pre-onboarding-selection-task.shop/todos/${id}`,
+          { todo: todo, isCompleted: true },
+          {
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+          getTodo();
+          setTodolist(response.data.map((datas) => datas));
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {});
+    } else if (state === true) {
+      axios
+        .put(
+          `https://pre-onboarding-selection-task.shop/todos/${id}`,
+          { todo: todo, isCompleted: false },
+          {
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+          getTodo();
+          setTodolist(response.data.map((datas) => datas));
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {});
+    }
+  };
+
   return (
     <Container>
       <h1>To do List ✔</h1>
@@ -63,7 +103,13 @@ export default function Article() {
         todolist.map((datas) => (
           <li>
             <label>
-              <input type='checkbox' />
+              <input
+                type='checkbox'
+                checked={datas.isCompleted}
+                onClick={() => {
+                  updateCheckState(datas.id, datas.todo, datas.isCompleted);
+                }}
+              />
               <span>{datas.todo}</span>
             </label>
           </li>
