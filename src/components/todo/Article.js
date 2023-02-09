@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { Container, Btn } from '../../global/style/SignArticle.styled';
 import { reOnChange } from '../../global/components/OnChange';
 export default function Article() {
-  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const [todo, setTodo] = useState({ todo: '' });
   const [todolist, setTodolist] = useState();
+  const [updateTodoItem, setUpdateTodoItem] = useState();
+  const [updateState, setUpdateState] = useState(false);
+  const [updateTodoNum, setUpdateTodoNum] = useState();
 
   useEffect(() => {
     getTodo();
@@ -84,6 +86,29 @@ export default function Article() {
     }
   };
 
+  const updateTodo = (id, todo, state) => {
+    axios
+      .put(
+        `https://pre-onboarding-selection-task.shop/todos/${id}`,
+        {
+          todo: todo,
+          isCompleted: state,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }
+      )
+      .then(function (response) {
+        getTodo();
+        setUpdateState(false);
+        setUpdateTodoNum('');
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {});
+  };
+
   const deleteTodo = (id) => {
     axios
       .delete(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
@@ -98,6 +123,11 @@ export default function Article() {
         console.log(error);
       })
       .then(function () {});
+  };
+
+  const setState = (id) => {
+    setUpdateState(true);
+    setUpdateTodoNum(id);
   };
 
   return (
@@ -117,7 +147,7 @@ export default function Article() {
       </div>
       {todolist &&
         todolist.map((datas) => (
-          <li>
+          <li key={datas.id}>
             <label>
               <input
                 type='checkbox'
@@ -126,21 +156,44 @@ export default function Article() {
                   updateCheckState(datas.id, datas.todo, datas.isCompleted);
                 }}
               />
-              <span>
-                {datas.todo}
-                {'\u00A0'}
-              </span>
-            </label>
-            <button data-testid='modify-button'>수정</button>
+              {updateState === true && updateTodoNum === datas.id ? (
+                <>
+                  <input onChange={(event) => reOnChange(event, updateTodoItem, setUpdateTodoItem)} name='todo'></input>
+                  <button
+                    data-testid='modify-button'
+                    onClick={() => {
+                      updateTodo(datas.id, updateTodoItem.todo, datas.isCompleted);
+                    }}
+                  >
+                    제출
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>
+                    {datas.todo}
+                    {'\u00A0'}
+                  </span>
+                  <button
+                    data-testid='modify-button'
+                    onClick={() => {
+                      setState(datas.id);
+                    }}
+                  >
+                    수정
+                  </button>
+                </>
+              )}
 
-            <button
-              data-testid='delete-button'
-              onClick={() => {
-                deleteTodo(datas.id);
-              }}
-            >
-              삭제
-            </button>
+              <button
+                data-testid='delete-button'
+                onClick={() => {
+                  deleteTodo(datas.id);
+                }}
+              >
+                삭제
+              </button>
+            </label>
           </li>
         ))}
     </Container>
