@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { useState } from 'react';
-import { Container, Btn } from '../../global/style/SignArticle.styled';
+import axios from 'axios';
+import { Container, Btn, TodoList } from '../../global/style/SignArticle.styled';
 import { reOnChange } from '../../global/components/OnChange';
+
 export default function Article() {
   const [todo, setTodo] = useState({ todo: '' });
   const [todolist, setTodolist] = useState();
@@ -14,7 +15,6 @@ export default function Article() {
     getTodo();
   }, []);
 
-  // 로그인
   const token = localStorage.getItem('JWT');
 
   const createTodo = () => {
@@ -117,7 +117,7 @@ export default function Article() {
       .then(function (response) {
         console.log(response);
         getTodo();
-        setTodolist(response.data.map((datas) => datas));
+        //   setTodolist(response.data.map((datas) => datas));
       })
       .catch(function (error) {
         console.log(error);
@@ -128,6 +128,11 @@ export default function Article() {
   const setState = (id) => {
     setUpdateState(true);
     setUpdateTodoNum(id);
+  };
+
+  const cancelState = (id) => {
+    setUpdateState(false);
+    setUpdateTodoNum('');
   };
 
   return (
@@ -145,57 +150,67 @@ export default function Article() {
           추가
         </Btn>
       </div>
-      {todolist &&
-        todolist.map((datas) => (
-          <li key={datas.id}>
-            <label>
-              <input
-                type='checkbox'
-                checked={datas.isCompleted}
-                onClick={() => {
-                  updateCheckState(datas.id, datas.todo, datas.isCompleted);
-                }}
-              />
-              {updateState === true && updateTodoNum === datas.id ? (
-                <>
-                  <input onChange={(event) => reOnChange(event, updateTodoItem, setUpdateTodoItem)} name='todo'></input>
-                  <button
-                    data-testid='modify-button'
-                    onClick={() => {
-                      updateTodo(datas.id, updateTodoItem.todo, datas.isCompleted);
-                    }}
-                  >
-                    제출
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span>
-                    {datas.todo}
-                    {'\u00A0'}
-                  </span>
-                  <button
-                    data-testid='modify-button'
-                    onClick={() => {
-                      setState(datas.id);
-                    }}
-                  >
-                    수정
-                  </button>
-                </>
-              )}
+      <TodoList>
+        {todolist &&
+          todolist.map((datas) => (
+            <li key={datas.id}>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={datas.isCompleted}
+                  onClick={() => {
+                    updateCheckState(datas.id, datas.todo, datas.isCompleted);
+                  }}
+                />
 
-              <button
-                data-testid='delete-button'
-                onClick={() => {
-                  deleteTodo(datas.id);
-                }}
-              >
-                삭제
-              </button>
-            </label>
-          </li>
-        ))}
+                {updateState === true && updateTodoNum === datas.id ? (
+                  <>
+                    <input data-testid='modify-input' onChange={(event) => reOnChange(event, updateTodoItem, setUpdateTodoItem)} name='todo'></input>
+                    <button
+                      data-testid='submit-button'
+                      onClick={() => {
+                        updateTodo(datas.id, updateTodoItem.todo, datas.isCompleted);
+                      }}
+                    >
+                      제출
+                    </button>
+                    <button
+                      data-testid='cancel-button'
+                      onClick={() => {
+                        cancelState(datas.id);
+                      }}
+                    >
+                      취소
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>
+                      {datas.todo}
+                      {'\u00A0'}
+                    </span>
+                    <button
+                      data-testid='modify-button'
+                      onClick={() => {
+                        setState(datas.id);
+                      }}
+                    >
+                      수정
+                    </button>
+                    <button
+                      data-testid='delete-button'
+                      onClick={() => {
+                        deleteTodo(datas.id);
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </>
+                )}
+              </label>
+            </li>
+          ))}
+      </TodoList>
     </Container>
   );
 }

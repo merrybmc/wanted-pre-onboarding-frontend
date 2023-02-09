@@ -9,7 +9,6 @@ export default function Article() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
 
-  // 로그인
   const signUp = () => {
     axios
       .post('https://pre-onboarding-selection-task.shop/auth/signin', userInfo, {
@@ -32,6 +31,7 @@ export default function Article() {
         ID {'\u00A0'}
         {'\u00A0'}:{'\u00A0'}
         <InputBox
+          type='email'
           data-testid='email-input'
           onChange={(event) => {
             reOnChange(event, userInfo, setUserInfo);
@@ -41,6 +41,7 @@ export default function Article() {
         <br />
         PW :{'\u00A0'}
         <InputBox
+          type='password'
           data-testid='password-input'
           onChange={(event) => {
             reOnChange(event, userInfo, setUserInfo);
@@ -52,7 +53,7 @@ export default function Article() {
       <Btn data-testid='signup-button' onClick={() => signUp()}>
         로그인
       </Btn>
-      <Btn onClick={() => navigate(-1)}>Home</Btn>
+      <Btn onClick={() => navigate('/')}>Home</Btn>
     </Container>
   );
 }
