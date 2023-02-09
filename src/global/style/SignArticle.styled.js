@@ -23,3 +23,8 @@ export const Btn = styled.button`
     background-color: #333d79;
   }
 `;
+
+export const TodoList = styled.div`
+  width: 320px;
+  margin-left: 50px;
+`;

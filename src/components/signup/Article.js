@@ -46,6 +46,7 @@ export default function Article() {
         ID {'\u00A0'}
         {'\u00A0'}:{'\u00A0'}
         <InputBox
+          type='email'
           data-testid='email-input'
           onChange={(event) => {
             reOnChange(event, userInfo, setUserInfo);
@@ -55,6 +56,7 @@ export default function Article() {
         <br />
         PW :{'\u00A0'}
         <InputBox
+          type='password'
           data-testid='password-input'
           onChange={(event) => {
             reOnChange(event, userInfo, setUserInfo);
@@ -66,7 +68,7 @@ export default function Article() {
       <button data-testid='signup-button' onClick={() => signUp()} disabled={btnState}>
         회원가입
       </button>
-      <Btn onClick={() => navigate(-1)}>Home</Btn>
+      <Btn onClick={() => navigate('/')}>Home</Btn>
     </Container>
   );
 }
